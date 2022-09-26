@@ -1,0 +1,375 @@
+type: custom:swipe-card
+parameters: []
+cards:
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - hours_to_show: 24
+            graph: none
+            type: sensor
+            entity: sensor.living_room_temperature
+            detail: 1
+            name: Temperature
+          - hours_to_show: 24
+            graph: none
+            type: sensor
+            entity: sensor.living_room_humidity
+            detail: 1
+            name: Humidity
+          - hours_to_show: 24
+            graph: none
+            type: sensor
+            entity: sensor.living_room_ambient_light
+            detail: 1
+            name: Ambient Light
+      - type: weather-forecast
+        entity: weather.forecast_home
+      - camera_view: auto
+        type: picture-glance
+        entities: []
+        title: Front Door
+        camera_image: camera.frontdoor_camera
+  - type: vertical-stack
+    cards:
+      - type: custom:mushroom-light-card
+        entity: light.living_room_lights
+      - type: custom:mushroom-light-card
+        entity: light.living_room_floor
+      - type: custom:mushroom-light-card
+        entity: light.living_room_overhead
+        show_brightness_control: true
+        collapsible_controls: true
+        fill_container: true
+      - type: custom:mushroom-light-card
+        entity: light.dining_room_overhead
+        fill_container: true
+        show_brightness_control: true
+      - type: custom:mushroom-light-card
+        entity: light.kitchen_overhead
+        fill_container: true
+      - type: custom:mushroom-light-card
+        entity: light.kitchen_over_sink
+        fill_container: true
+      - type: custom:mushroom-light-card
+        entity: light.porch_light
+  - type: vertical-stack
+    cards:
+      - type: media-control
+        entity: media_player.living_room_roku_ultra
+      - type: custom:roku-card
+        entity: remote.living_room_roku_ultra
+        tv: true
+        apps:
+          - image: /local/icons/plex.jpg
+            app: Plex
+            tap_action:
+              action: call-service
+              service: media_player.select_source
+              service_data:
+                source: Plex - Free Movies & TV
+                entity_id: media_player.living_room_roku_ultra
+          - image: /local/icons/netflix.jpg
+            app: Netflix
+            tap_action:
+              action: call-service
+              service: media_player.select_source
+              service_data:
+                source: Netflix
+                entity_id: media_player.living_room_roku_ultra
+          - image: /local/icons/hulu.png
+            app: Hulu
+            tap_action:
+              action: call-service
+              service: media_player.select_source
+              service_data:
+                source: Hulu
+                entity_id: media_player.living_room_roku_ultra
+          - image: /local/icons/peacock.jpg
+            app: Peacock TV
+            tap_action:
+              action: call-service
+              service: media_player.select_source
+              service_data:
+                source: Peacock TV
+                entity_id: media_player.living_room_roku_ultra
+        volume_up:
+          tap_action:
+            action: call-service
+            service: remote.send_command
+            service_data:
+              entity_id: remote.living_room_roku_ultra
+              command: volume_up
+        volume_down:
+          double_tap_action:
+            action: call-service
+            service: remote.send_command
+            service_data:
+              entity_id: remote.living_room_roku_ultra
+              command: volume_down
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            entity: input_boolean.plexcontinuewatching
+            show_icon: true
+            show_name: true
+            tap_action:
+              action: call-service
+              service: script.plex_continue_watching
+              icon: mdi:play
+              state:
+                - value: 'on'
+                  icon: mdi:play
+                  color: rgb(255,0,0)
+                - value: 'off'
+                  color: rgb(68,115,159)
+          - type: custom:button-card
+            entity: input_boolean.plextv
+            show_icon: true
+            show_name: true
+            tap_action:
+              action: call-service
+              service: script.1662599190981
+              icon: mdi:television-classic
+              state:
+                - value: 'on'
+                  icon: mdi:television-classic
+                  color: rgb(255,0,0)
+                - value: 'off'
+                  color: rgb(68,115,159)
+          - type: custom:button-card
+            entity: input_boolean.plexmovies
+            show_icon: true
+            show_name: true
+            tap_action:
+              action: call-service
+              service: script.1662599229091
+              icon: mdi:video-vintage
+              state:
+                - value: 'on'
+                  icon: mdi:video-vintage
+                  color: rgb(255,0,0)
+                - value: 'off'
+                  color: rgb(68,115,159)
+          - type: custom:button-card
+            entity: input_boolean.plexhomemovie
+            show_icon: true
+            show_name: true
+            tap_action:
+              action: call-service
+              service: script.1662599239435
+              icon: mdi:camcorder
+              state:
+                - value: 'on'
+                  icon: mdi:camcorder
+                  color: rgb(255,0,0)
+                - value: 'off'
+                  color: rgb(68,115,159)
+      - type: horizontal-stack
+        cards:
+          - type: conditional
+            conditions:
+              - entity: input_boolean.plexcontinuewatching
+                state: 'on'
+              - entity: sensor.living_room_roku_ultra_active_app
+                state: Plex - Free Movies & TV
+            card:
+              type: custom:plex-meets-homeassistant
+              protocol: https
+              sort: ''
+              playTrailer: true
+              showExtras: true
+              showSearch: true
+              ip: YOUR_PLEX_HOST_IP_HERE
+              token: YOUR_PLEX_TOKEN_HERE 
+              port: '32400'
+              entity:
+                - YOUR_PLEX_MEDIA_PLAYER_ENTITY_HERE
+              libraryName: Continue Watching
+              maxCount: ''
+              maxRows: ''
+              useHorizontalScroll: 'No'
+              useShuffle: 'No'
+              displayTitleMain: 'Yes'
+              displaySubtitleMain: 'Yes'
+              minWidth: ''
+              minEpisodeWidth: ''
+              minExpandedWidth: ''
+              fontSize1: ''
+              fontSize2: ''
+              fontSize3: ''
+              fontSize4: ''
+              minExpandedHeight: ''
+              title: ''
+              runBefore: ''
+              runAfter: ''
+          - type: conditional
+            conditions:
+              - entity: input_boolean.plextv
+                state: 'on'
+              - entity: sensor.living_room_roku_ultra_active_app
+                state: Plex - Free Movies & TV
+            card:
+              type: custom:plex-meets-homeassistant
+              protocol: https
+              sort: titleSort:asc
+              playTrailer: true
+              showExtras: true
+              showSearch: true
+              ip: YOUR_PLEX_HOST_IP_HERE
+              token: YOUR_PLEX_TOKEN_HERE 
+              port: '32400'
+              entity:
+                - YOUR_PLEX_MEDIA_PLAYER_ENTITY_HERE
+              libraryName: TV Shows
+              maxCount: ''
+              maxRows: ''
+              useHorizontalScroll: 'No'
+              useShuffle: 'No'
+              displayTitleMain: 'Yes'
+              displaySubtitleMain: 'Yes'
+              minWidth: ''
+              minEpisodeWidth: ''
+              minExpandedWidth: ''
+              fontSize1: ''
+              fontSize2: ''
+              fontSize3: ''
+              fontSize4: ''
+              minExpandedHeight: ''
+              title: ''
+              runBefore: ''
+              runAfter: ''
+          - type: conditional
+            conditions:
+              - entity: input_boolean.plexmovies
+                state: 'on'
+              - entity: sensor.living_room_roku_ultra_active_app
+                state: Plex - Free Movies & TV
+            card:
+              type: custom:plex-meets-homeassistant
+              protocol: https
+              sort: titleSort:asc
+              playTrailer: true
+              showExtras: true
+              showSearch: true
+              ip: YOUR_PLEX_HOST_IP_HERE
+              token: YOUR_PLEX_TOKEN_HERE 
+              port: '32400'
+              entity:
+                - YOUR_PLEX_MEDIA_PLAYER_ENTITY_HERE
+              libraryName: Movies
+              maxCount: ''
+              maxRows: ''
+              useHorizontalScroll: 'No'
+              useShuffle: 'No'
+              displayTitleMain: 'Yes'
+              displaySubtitleMain: 'Yes'
+              minWidth: ''
+              minEpisodeWidth: ''
+              minExpandedWidth: ''
+              fontSize1: ''
+              fontSize2: ''
+              fontSize3: ''
+              fontSize4: ''
+              minExpandedHeight: '200'
+              title: ''
+              runBefore: ''
+              runAfter: ''
+          - type: conditional
+            conditions:
+              - entity: input_boolean.plexhomemovie
+                state: 'on'
+              - entity: sensor.living_room_roku_ultra_active_app
+                state: Plex - Free Movies & TV
+            card:
+              type: custom:plex-meets-homeassistant
+              protocol: https
+              sort: titleSort:asc
+              playTrailer: true
+              showExtras: true
+              showSearch: true
+              ip: YOUR_PLEX_HOST_IP_HERE
+              token: YOUR_PLEX_TOKEN_HERE 
+              port: '32400'
+              entity:
+                - YOUR_PLEX_MEDIA_PLAYER_ENTITY_HERE
+              libraryName: Home Movies
+              maxCount: ''
+              maxRows: ''
+              useHorizontalScroll: 'No'
+              useShuffle: 'No'
+              displayTitleMain: 'Yes'
+              displaySubtitleMain: 'Yes'
+              minWidth: ''
+              minEpisodeWidth: ''
+              minExpandedWidth: ''
+              fontSize1: ''
+              fontSize2: ''
+              fontSize3: ''
+              fontSize4: ''
+              minExpandedHeight: '200'
+              title: ''
+              runBefore: ''
+              runAfter: ''
+          - type: conditional
+            conditions:
+              - entity: sensor.living_room_roku_ultra_active_app
+                state: Spotify Music
+            card:
+              type: custom:spotify-card
+              limit: 10
+              playlist_type: discover-weekly
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: binary_sensor.freebsd_router_wan_status
+            name: Internet Status
+            layout: vertical
+            fill_container: true
+          - type: custom:mushroom-entity-card
+            entity: sensor.speedtest_download
+            layout: vertical
+            name: Download Speeds
+            fill_container: true
+          - type: custom:mushroom-entity-card
+            entity: sensor.speedtest_upload
+            name: Upload Speeds
+            layout: vertical
+            fill_container: true
+      - type: custom:mushroom-entity-card
+        entity: sensor.cnmf632c_634c
+        name: Printer Status
+        layout: vertical
+      - type: custom:mushroom-entity-card
+        entity: sensor.cnmf632c_634c_canon_cartridge_045_black_toner
+        icon_color: black
+        name: Black Toner
+      - type: custom:mushroom-entity-card
+        entity: sensor.cnmf632c_634c_canon_cartridge_045_cyan_toner
+        icon_color: cyan
+        name: Cyan Toner
+      - type: custom:mushroom-entity-card
+        entity: sensor.cnmf632c_634c_canon_cartridge_045_magenta_to
+        icon_color: purple
+        name: Magenta Toner
+      - type: custom:mushroom-entity-card
+        entity: sensor.cnmf632c_634c_canon_cartridge_045_yellow_ton
+        icon_color: amber
+        name: Yellow Toner
+      - type: glance
+        entities:
+          - entity: sensor.apc1440xl_input_voltage
+          - entity: sensor.apc1440xl_load
+          - entity: sensor.apc1440xl_battery_charge
+      - type: glance
+        entities:
+          - entity: sensor.eatonex1500_input_voltage
+          - entity: sensor.eatonex1500_load
+          - entity: sensor.eatonex1500_battery_charge
+      - type: glance
+        entities:
+          - entity: sensor.eaton5p_input_voltage
+          - entity: sensor.eaton5p_load
+          - entity: sensor.eaton5p_battery_charge
